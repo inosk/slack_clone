@@ -1,0 +1,3 @@
+- supabase auth
+  - https://docs.github.com/ja/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+  - https://supabase.com/docs/guides/auth/server-side/creating-a-client
