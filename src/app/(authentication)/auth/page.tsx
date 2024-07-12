@@ -1,5 +1,6 @@
 'use client';
 
+import { registerWithEmail } from '@/app/actions/register-with-email';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -39,7 +40,14 @@ const Page = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    setIsAuthenticating(true);
+    const response = await registerWithEmail(values);
+    const { data, error } = JSON.parse(response);
+    setIsAuthenticating(false);
+    if (error) {
+      console.warn('Sign in error', error);
+      return;
+    }
   }
 
   async function socialAuth(provider: Provider) {
