@@ -6,6 +6,7 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  // [Q] supabaseServer.tsからよんではだめ？？
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -33,6 +34,7 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
+  // 未ログインの場合にログインを促すための処理
   const {
     data: { user },
   } = await supabase.auth.getUser();
