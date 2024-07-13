@@ -1,7 +1,7 @@
 CREATE NEW USRE
 
-create table
-users (
+-- users テーブルの作成
+create table users (
   id uuid primary key references auth.users(id) not null,
   email text unique not null,
   name text,
@@ -16,27 +16,38 @@ users (
   channels text[]
 );
 
+-- cf: https://supabase.com/docs/guides/database/postgres/row-level-security
+-- postgres の機能 Row Level Security（RLS）
 alter table users enable row level security;
 
+-- RLSのポリシーの定義。自分の情報しか見られない
 create policy "Can view own user data." on users for
-select
-  using (auth.uid () = id);
+select using (auth.uid () = id);
 
+-- RLSのポリシーの定義。自分の情報しか更新できない
 create policy "Can update own user data." on users
-for update
-  using (auth.uid () = id);
+for update using (auth.uid () = id);
 
+-- 関数定義。引数なし、戻り値がtriggerの関数定義
+-- $$ は関数定義の開始と終了
 create or replace function public.handle_new_user () returns trigger as $$
 begin
+  -- avatar_urlの初期値設定。null or 空文字列ならデフォルトの値をいれる
   if new.raw_user_meta_data->>'avatar_url' is null or new.raw_user_meta_data->>'avatar_url' = '' then
-  new.raw_user_meta_data = jsonb_set(new.raw_user_meta_data, '{avatar_url}', '"https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"' ::jsonb);
+    new.raw_user_meta_data = jsonb_set(new.raw_user_meta_data, '{avatar_url}', '"https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"' ::jsonb);
   end if;
-  insert into public.users (id, name, type, email, avatar_url)
-  values (new.id, new.raw_user_meta_data->>'full_name', 'user', new.email, new.raw_user_meta_data->>'avatar_url');
+
+  insert into public.users (id, name, type, email, avatar_url) values (new.id, new.raw_user_meta_data->>'full_name', 'user', new.email, new.raw_user_meta_data->>'avatar_url');
+
   return new;
 end;
 $$ language plpgsql security definer;
+-- 関数定義に利用した言語の指定 plpgsql
+-- security definer は関数実行を定義者権限で実行することの宣言
+-- この宣言がない場合、関数は通常接続ユーザの権限で実行される
 
+-- trigerの登録
+-- auth.usersにinsertされたあとに↑で定義した handle_nw_userを実行する
 create or replace trigger on_auth_user_created
 after insert on auth.users for each row
 execute procedure public.handle_new_user ();
