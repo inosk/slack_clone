@@ -32,7 +32,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           type?: string | null
-          workspace?: string[] | null
+          workspaces?: string[] | null
         }
         Update: {
           avatar_url?: string
@@ -44,13 +44,60 @@ export type Database = {
           name?: string | null
           phone?: string | null
           type?: string | null
-          workspace?: string[] | null
+          workspaces?: string[] | null
         }
         Relationships: [
           {
             foreignKeyName: "users_id_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspaces: {
+        Row: {
+          channels: string[] | null
+          created_at: string
+          id: string
+          image_url: string | null
+          invite_code: string | null
+          members: string[] | null
+          name: string
+          regulators: string[] | null
+          slug: string
+          super_admin: string
+        }
+        Insert: {
+          channels?: string[] | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          invite_code?: string | null
+          members?: string[] | null
+          name: string
+          regulators?: string[] | null
+          slug: string
+          super_admin?: string
+        }
+        Update: {
+          channels?: string[] | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          invite_code?: string | null
+          members?: string[] | null
+          name?: string
+          regulators?: string[] | null
+          slug?: string
+          super_admin?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspaces_super_admin_fkey"
+            columns: ["super_admin"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
