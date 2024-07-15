@@ -1,9 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import ImageUpload from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import Typography from '@/components/ui/typography';
 import { useCreateWorkspaceValues } from '@/hooks/create-workspace-value';
+import { useState } from 'react';
 
 const Page = () => {
   const { currStep } = useCreateWorkspaceValues();
@@ -77,8 +79,13 @@ const Step1 = () => {
 
 const Step2 = () => {
   const { imageUrl, updateValues, setCurrStep } = useCreateWorkspaceValues();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    // WORKSPACE CREATION LOGIC
+    setIsSubmitting(false);
+  };
 
   return (
     <>
@@ -99,8 +106,12 @@ const Step2 = () => {
           className="text-neutral-400"
           variant="p"
         />
-        <fieldset className="mt-6 flex flex-col items-center space-y-9">
-          {/* IMAGE COMPONENT*/}
+
+        <fieldset
+          disabled={isSubmitting}
+          className="mt-6 flex flex-col items-center space-y-9"
+        >
+          <ImageUpload />
           <div className="space-x-5">
             <Button
               onClick={() => {
