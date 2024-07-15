@@ -20,7 +20,7 @@ export type Database = {
           name: string | null
           phone: string | null
           type: string | null
-          workspace: string[] | null
+          workspaces: string[] | null
         }
         Insert: {
           avatar_url: string
