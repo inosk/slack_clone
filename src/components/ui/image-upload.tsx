@@ -1,39 +1,38 @@
 import Image from 'next/image';
 import { ImCancelCircle } from 'react-icons/im';
-import { Dropzone } from './dropzone';
-import { useState } from 'react';
+import { useCreateWorkspaceValues } from '@/hooks/create-workspace-value';
+import { UploadDropzone } from '@/lib/uploadthing';
 
 const ImageUpload = () => {
-  //const { imageUrl, updateImageUrl } = useUploadImage();
-  const [files, setFiles] = useState<string[]>([]);
+  const { imageUrl, updateImageUrl } = useCreateWorkspaceValues();
 
-  const deleteFile = (target: string) => {
-    setFiles(files.filter((file) => file !== target));
-  };
+  if (imageUrl) {
+    return (
+      <div className="flex item-center justify-center h-32 w-32 relative">
+        <Image
+          src={imageUrl}
+          className="object-cover w-full h-full rounded-md"
+          alt="workspace"
+          width={320}
+          height={320}
+        />
+        <ImCancelCircle
+          size={30}
+          onClick={() => updateImageUrl('')}
+          className="absolute cursor-pointer -right-2 -top-2 z-10 hover:scale-110"
+        />
+      </div>
+    );
+  }
 
   return (
-    <>
-      <Dropzone onChange={setFiles} fileExtension={'png'}></Dropzone>
-      {files.map((file, index) => (
-        <div
-          key={index}
-          className="flex items-center justify-center h-32 w-32 relative"
-        >
-          <Image
-            src={file}
-            className="object-cover w-full h-full rounded-md"
-            alt="workspace"
-            width={320}
-            height={320}
-          />
-          <ImCancelCircle
-            size={30}
-            onClick={() => deleteFile(file)}
-            className="absolute cursor-pointer -right-2 -top-2 z10 hover:scale-110"
-          />
-        </div>
-      ))}
-    </>
+    <UploadDropzone
+      endpoint="workspaceImage"
+      onClientUploadComplete={(res) => {
+        updateImageUrl(res?.[0].url);
+      }}
+      onUploadError={(err) => console.log(err)}
+    />
   );
 };
 
