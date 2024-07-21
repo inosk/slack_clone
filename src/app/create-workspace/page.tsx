@@ -12,6 +12,13 @@ import { createWorkspace } from '../actions/create-workspace';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
+/**
+ * workspaceを作るフォームの実装
+ * 2ページで構成される。
+ * 1. workspaceの入力
+ * 2. workspaceの画像選択
+ */
+
 const Page = () => {
   const { currStep } = useCreateWorkspaceValues();
 
@@ -46,6 +53,7 @@ const Page = () => {
 export default Page;
 
 const Step1 = () => {
+  // zutandで作ったstoreで状態管理
   const { name, updateValues, setCurrStep } = useCreateWorkspaceValues();
 
   return (
@@ -83,7 +91,8 @@ const Step1 = () => {
 };
 
 const Step2 = () => {
-  const { imageUrl, updateValues, setCurrStep, name } =
+  // zutandで作ったstoreで状態管理
+  const { imageUrl, updateImageUrl, setCurrStep, name } =
     useCreateWorkspaceValues();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -129,7 +138,7 @@ const Step2 = () => {
           <div className="space-x-5">
             <Button
               onClick={() => {
-                updateValues('');
+                updateImageUrl('');
                 handleSubmit();
               }}
             >
