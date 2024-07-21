@@ -51,3 +51,13 @@ $$ language plpgsql security definer;
 create or replace trigger on_auth_user_created
 after insert on auth.users for each row
 execute procedure public.handle_new_user ();
+
+
+ADD USER TO workspaces
+
+create or replace function add_workspace_to_user (user_id uuid, new_workspace text) returns void as $$
+begin
+  update users set workspaces = workspaces || array[new_workspace]
+  where id = user_id;
+end
+$$ language plpgsql;

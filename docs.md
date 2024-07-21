@@ -10,3 +10,7 @@ https://supabase.com/docs/guides/api/rest/generating-types
 # uploadthing
 
 https://docs.uploadthing.com/
+
+# nestjs
+
+https://nextjs.org/docs/messages/next-image-unconfigured-host
