@@ -1,5 +1,4 @@
-import { Button } from '@/components/ui/button';
-import { getUserData } from '../actions/get-user-data';
+import { getUserData } from '../../actions/get-user-data';
 import { redirect } from 'next/navigation';
 
 export default async function Home() {

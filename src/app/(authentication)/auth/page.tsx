@@ -1,6 +1,6 @@
 'use client';
 
-import { registerWithEmail } from '@/app/actions/register-with-email';
+import { registerWithEmail } from '@/actions/register-with-email';
 import { Button } from '@/components/ui/button';
 import {
   Form,

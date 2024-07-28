@@ -8,7 +8,7 @@ import { useCreateWorkspaceValues } from '@/hooks/create-workspace-value';
 import { useState } from 'react';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
-import { createWorkspace } from '../actions/create-workspace';
+import { createWorkspace } from '../../actions/create-workspace';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
