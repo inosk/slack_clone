@@ -23,7 +23,7 @@ export const createWorkspace = async ({
   }
 
   // supabase への insert クエリ
-  const { error, data: workspaceRecod } = await supabase
+  const { error, data: workspaceRecord } = await supabase
     .from('workspaces')
     .insert({
       image_url: imageUrl,
@@ -40,7 +40,7 @@ export const createWorkspace = async ({
 
   const [, updateWorkspaceError] = await updateUserWorkspace(
     userData.id,
-    workspaceRecod[0].id,
+    workspaceRecord[0].id,
   );
 
   if (updateWorkspaceError) {
@@ -51,7 +51,7 @@ export const createWorkspace = async ({
   // Add user to workspace members
   const [, addMemberToWorkspaceError] = await addMemberToWorkspace(
     userData.id,
-    workspaceRecod[0].id,
+    workspaceRecord[0].id,
   );
 
   if (addMemberToWorkspaceError) {

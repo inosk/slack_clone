@@ -6,19 +6,16 @@ import {
 import Sidebar from '@/components/sidebar';
 import { redirect } from 'next/navigation';
 import { WorkSpace } from '@/types/app';
+import InfoSection from '@/components/info-section';
+import Typography from '@/components/ui/typography';
 
 const Page = async ({ params: { id } }: { params: { id: string } }) => {
   const userData = await getUserData();
 
   if (!userData) return redirect('/auth');
 
-  const [userWorkspaceData, userWorkspaceError] = await getUserWorkspaceData(
-    userData.workspaces!,
-  );
-
-  console.log(id);
-  const [currentWorkspaceData, currentWorkspaceError] =
-    await getCurrentWorkspaceData(id)!;
+  const [userWorkspaceData] = await getUserWorkspaceData(userData.workspaces!);
+  const [currentWorkspaceData] = await getCurrentWorkspaceData(id)!;
 
   return (
     <>
@@ -28,8 +25,17 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
           userData={userData}
           userWorkspaceData={userWorkspaceData as WorkSpace[]}
         />
+        <InfoSection />
+        Workspace Workspace
+        <Typography variant="h1" text="Workspace Workspace" />
+        <Typography variant="h2" text="Workspace Workspace" />
+        <Typography variant="h3" text="Workspace Workspace" />
+        <Typography variant="h4" text="Workspace Workspace" />
+        <Typography variant="h5" text="Workspace Workspace" />
+        <Typography variant="h6" text="Workspace Workspace" />
+        <Typography variant="p" text="Workspace Workspace" />
       </div>
-      ;<div className="md:hidden block min-h-screen">Mobile</div>
+      <div className="md:hidden block min-h-screen">Mobile</div>
     </>
   );
 };

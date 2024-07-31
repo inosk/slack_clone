@@ -17,11 +17,13 @@ const MainContent = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className={cn('md:px-2 md:pb-2 md:pt-14 md:h-screen')}>
+    <div
+      className={cn('md:px-2 md:pb-2 md:pt-14 md:h-screen', backgroundColor)}
+    >
       <main
         className={cn(
-          'md:ml-[280px] lg:ml-[420px] md:h-full overflow-scroll [&::state(webkit-scrollbar-thumb)]:rounded-[6px] [&::state(webkit-scrollbar-thumb)]:bg-foreground/60 [&::state(webkit-scrollbar-track)]:bg-none [&::state(webkit-scrollbar)]:w-2',
-          theme === 'dark' ? 'bg-[#232529]' : 'bg-light',
+          'md:ml-[280px] md:rounded-r-xl lg:ml-[420px] md:h-full overflow-y-scroll [&::state(webkit-scrollbar-thumb)]:rounded-[6px] [&::state(webkit-scrollbar-thumb)]:bg-foreground/60 [&::state(webkit-scrollbar-track)]:bg-none [&::state(webkit-scrollbar)]:w-2',
+          theme === 'dark' ? 'bg-[#232529]' : 'bg-white',
         )}
       >
         {children}

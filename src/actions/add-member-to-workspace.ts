@@ -2,7 +2,7 @@ import { createClient } from '@/supabase/supabaseServer';
 
 export const addMemberToWorkspace = async (
   userId: string,
-  workspaceId: number,
+  workspaceId: string,
 ) => {
   const supabase = createClient();
   const { data: addMemberToWorkspaceDate, error: addMemberToWorkspaceError } =
