@@ -17,6 +17,8 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
   const [userWorkspaceData] = await getUserWorkspaceData(userData.workspaces!);
   const [currentWorkspaceData] = await getCurrentWorkspaceData(id)!;
 
+  console.log(userWorkspaceData);
+
   return (
     <>
       <div className="hidden md:block">
@@ -25,7 +27,10 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
           userData={userData}
           userWorkspaceData={userWorkspaceData as WorkSpace[]}
         />
-        <InfoSection />
+        <InfoSection
+          currentWorkspaceData={currentWorkspaceData as WorkSpace}
+          userData={userData}
+        />
         Workspace Workspace
         <Typography variant="h1" text="Workspace Workspace" />
         <Typography variant="h2" text="Workspace Workspace" />

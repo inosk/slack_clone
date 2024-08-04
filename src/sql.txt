@@ -61,3 +61,47 @@ begin
   where id = user_id;
 end
 $$ language plpgsql;
+
+
+CREATE channels
+
+create table
+channels (
+  id uuid primary key default gen_random_uuid() not null,
+  name text not null,
+  workspace_id uuid references public.workspaces (id) not null,
+  user_id uuid references public.users (id) not null,
+  members text[],
+  regulators text[]
+);
+
+alter table channels enable row level security;
+
+create policy "Can view own user data." on channels for
+select
+  using (auth.uid () = user_id);
+
+create policy "Can update own user data." on channels for
+update
+  using (auth.uid () = user_id);
+
+create policy "Can insert own user data." on channels for
+insert with check (auth.uid () = user_id);
+
+UPDATE USER channels
+
+create or replace function update_user_channels (user_id uuid, channel_id text) returns void as $$
+begin
+  update users set channels = channels || array[channel_id]
+  where id = user_id;
+end
+$$ language plpgsql;
+
+UPDATE CHALLE members
+
+create or replace function update_channel_members (new_member text, channel_id uuid) returns void as $$
+begin
+  update channels set members = members || array[new_member]
+  where id = channel_id;
+end
+$$ language plpgsql;
