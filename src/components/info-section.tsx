@@ -11,34 +11,55 @@ import { useState } from 'react';
 import { FaArrowDown, FaArrowUp, FaPlus } from 'react-icons/fa6';
 import Typography from './ui/typography';
 import CreateChannelDaialog from './create-channel-dialog';
-import { User, WorkSpace } from '@/types/app';
+import { Channel, User, WorkSpace } from '@/types/app';
+import { useRouter } from 'next/navigation';
 
 type InfoSectionProps = {
   userData: User;
   currentWorkspaceData: WorkSpace;
+  userWorkspaceChannels: Channel[];
+  currentChannelId: string;
 };
 
-const InfoSection = ({ userData, currentWorkspaceData }: InfoSectionProps) => {
+const InfoSection = ({
+  userData,
+  currentWorkspaceData,
+  userWorkspaceChannels,
+  currentChannelId,
+}: InfoSectionProps) => {
   const { color } = useColorPreferences();
-  const [isChannelCollapsed, setIsChannelCollapsed] = useState<boolean>(false);
+  const [isChannelCollapsed, setIsChannelCollapsed] = useState<boolean>(true);
   const [isDirectMessageCollapsed, setIsDirectMessageCollapsed] =
-    useState<boolean>(false);
+    useState<boolean>(true);
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   let backgroundColor = 'bg-primary-light';
   if (color === 'green') {
     backgroundColor = 'bg-green-900';
   } else if (color === 'blue') {
-    backgroundColor = 'bg-blur-900';
+    backgroundColor = 'bg-blue-900';
   }
 
   let hoverBg = 'hover:bg-primary-dark';
   if (color === 'green') {
     hoverBg = 'hover:bg-green-700';
   } else if (color === 'blue') {
-    hoverBg = 'hover:bg-blur-700';
+    hoverBg = 'hover:bg-blue-700';
   }
+
+  let secondaryBg = 'bg-primary-dark';
+  if (color === 'green') {
+    secondaryBg = 'bg-green-700';
+  } else if (color === 'blue') {
+    secondaryBg = 'bg-blue-700';
+  }
+
+  const navigateToChannel = (channelId: string) => {
+    const url = `/workspace/${currentWorkspaceData.id}/channels/${channelId}`;
+    router.push(url);
+  };
 
   return (
     <div
@@ -66,21 +87,22 @@ const InfoSection = ({ userData, currentWorkspaceData }: InfoSectionProps) => {
               </div>
             </div>
             <CollapsibleContent>
-              <Typography
-                variant="p"
-                text="# channel-name-1"
-                className={cn('px-2 py-1 rounded-sm cursor-pointer', hoverBg)}
-              />
-              <Typography
-                variant="p"
-                text="# channel-name-1"
-                className={cn('px-2 py-1 rounded-sm cursor-pointer', hoverBg)}
-              />
-              <Typography
-                variant="p"
-                text="# channel-name-1"
-                className={cn('px-2 py-1 rounded-sm cursor-pointer', hoverBg)}
-              />
+              {userWorkspaceChannels.map((channel) => {
+                const activeChannel = currentChannelId === channel.id;
+                return (
+                  <Typography
+                    key={channel.id}
+                    variant="p"
+                    text={`# ${channel.name}`}
+                    className={cn(
+                      'px-2 py-1 rounded-sm cursor-pointer',
+                      hoverBg,
+                      activeChannel && secondaryBg,
+                    )}
+                    onClick={() => navigateToChannel(channel.id)}
+                  />
+                );
+              })}
             </CollapsibleContent>
           </Collapsible>
         </div>

@@ -51,6 +51,16 @@ export const createChannel = async ({
   if (addChannelToUserError) {
     return { error: 'Add members channel error' };
   }
+
+  // Add channel to Workspace
+  const [, updateWorkspaceError] = await updateWorkspaceChannel(
+    channelRecord[0].id,
+    workspaceId,
+  );
+
+  if (updateWorkspaceError) {
+    return { error: 'Update Channel Workspace error' };
+  }
 };
 
 const addChannelToUser = async (userId: string, channelId: string) => {
@@ -69,10 +79,23 @@ const addChannelToUser = async (userId: string, channelId: string) => {
 
 const updateChannelMembers = async (channelId: string, userId: string) => {
   const supabase = createClient();
-  const { data: updateChannleData, error: updateChannelError } =
+  const { data: updateChannelData, error: updateChannelError } =
     await supabase.rpc('update_channel_members', {
       new_member: userId,
       channel_id: channelId,
     });
-  return [updateChannleData, updateChannelError];
+  return [updateChannelData, updateChannelError];
+};
+
+const updateWorkspaceChannel = async (
+  channelId: string,
+  workspaceId: string,
+) => {
+  const supabase = createClient();
+  const { data: updateWorkspaceData, error: updateWorkspaceError } =
+    await supabase.rpc('add_channel_to_workspace', {
+      channel_id: channelId,
+      workspace_id: workspaceId,
+    });
+  return [updateWorkspaceData, updateWorkspaceError];
 };

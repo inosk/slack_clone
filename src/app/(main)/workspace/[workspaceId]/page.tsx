@@ -7,17 +7,32 @@ import Sidebar from '@/components/sidebar';
 import { redirect } from 'next/navigation';
 import { WorkSpace } from '@/types/app';
 import InfoSection from '@/components/info-section';
-import Typography from '@/components/ui/typography';
+import { getUserWorkspaceChannels } from '@/actions/get-user-workspace-channels';
+import NoDataScreen from '@/components/no-data-component';
 
-const Page = async ({ params: { id } }: { params: { id: string } }) => {
+const Page = async ({
+  params: { workspaceId },
+}: {
+  params: { workspaceId: string };
+}) => {
   const userData = await getUserData();
 
   if (!userData) return redirect('/auth');
 
   const [userWorkspaceData] = await getUserWorkspaceData(userData.workspaces!);
-  const [currentWorkspaceData] = await getCurrentWorkspaceData(id)!;
 
-  console.log(userWorkspaceData);
+  const [currentWorkspaceData] = await getCurrentWorkspaceData(workspaceId)!;
+
+  const userWorkspaceChannels = await getUserWorkspaceChannels(
+    currentWorkspaceData.id,
+    userData.id,
+  );
+
+  if (userWorkspaceChannels.length) {
+    redirect(
+      `/workspace/${workspaceId}/channels/${userWorkspaceChannels[0].id}`,
+    );
+  }
 
   return (
     <>
@@ -30,15 +45,14 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
         <InfoSection
           currentWorkspaceData={currentWorkspaceData as WorkSpace}
           userData={userData}
+          userWorkspaceChannels={userWorkspaceChannels}
+          currentChannelId=""
         />
-        Workspace Workspace
-        <Typography variant="h1" text="Workspace Workspace" />
-        <Typography variant="h2" text="Workspace Workspace" />
-        <Typography variant="h3" text="Workspace Workspace" />
-        <Typography variant="h4" text="Workspace Workspace" />
-        <Typography variant="h5" text="Workspace Workspace" />
-        <Typography variant="h6" text="Workspace Workspace" />
-        <Typography variant="p" text="Workspace Workspace" />
+        <NoDataScreen
+          workspaceName={currentWorkspaceData.name}
+          userId={userData.id}
+          workspaceId={currentWorkspaceData.id}
+        />
       </div>
       <div className="md:hidden block min-h-screen">Mobile</div>
     </>

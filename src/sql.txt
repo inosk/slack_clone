@@ -105,3 +105,12 @@ begin
   where id = channel_id;
 end
 $$ language plpgsql;
+
+UPDATE WORKSPACE channels
+
+create or replace function add_channel_to_workspace(channel_id text, workspace_id uuid) returns void as $$
+begin
+  update workspaces set channels= channels || array[channel_id]
+  where id = workspace_id;
+end
+$$ language plpgsql;
