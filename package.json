@@ -24,6 +24,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@supabase/ssr": "^0.4.0",
     "@supabase/supabase-js": "^2.44.2",
+    "@tailwindcss/typography": "^0.5.14",
     "@tiptap/extension-placeholder": "^2.5.9",
     "@tiptap/react": "^2.5.9",
     "@tiptap/starter-kit": "^2.5.9",
