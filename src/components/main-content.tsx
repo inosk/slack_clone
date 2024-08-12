@@ -22,7 +22,7 @@ const MainContent = ({ children }: { children: ReactNode }) => {
     >
       <main
         className={cn(
-          'md:ml-[280px] md:rounded-r-xl lg:ml-[420px] md:h-full overflow-y-scroll [&::state(webkit-scrollbar-thumb)]:rounded-[6px] [&::state(webkit-scrollbar-thumb)]:bg-foreground/60 [&::state(webkit-scrollbar-track)]:bg-none [&::state(webkit-scrollbar)]:w-2',
+          'md:ml-[280px] md:rounded-r-xl lg:ml-[420px] md:h-full overflow-y-hidden',
           theme === 'dark' ? 'bg-[#232529]' : 'bg-white',
         )}
       >

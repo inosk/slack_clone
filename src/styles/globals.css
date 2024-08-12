@@ -74,3 +74,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap.ProseMirror {
+  outline: none;
+}
+
+.tiptap p.is-editorempty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  height: 0px;
+  pointer-events: none;
+}
