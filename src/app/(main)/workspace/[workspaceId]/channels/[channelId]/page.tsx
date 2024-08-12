@@ -62,6 +62,7 @@ const Page = async ({
           type="channel"
           channel={currentChannelData}
           workspaceData={currentWorkspaceData as WorkSpace}
+          userData={userData}
         />
       </div>
     </div>
