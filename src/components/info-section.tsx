@@ -18,7 +18,7 @@ type InfoSectionProps = {
   userData: User;
   currentWorkspaceData: WorkSpace;
   userWorkspaceChannels: Channel[];
-  currentChannelId: string;
+  currentChannelId: string | undefined;
 };
 
 const InfoSection = ({

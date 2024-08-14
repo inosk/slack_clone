@@ -21,10 +21,11 @@ import ChatFileUpload from './chat-file-upload';
 
 type Props = {
   apiUrl: string;
-  type: 'channel' | 'directMessage';
+  type: 'Channel' | 'DirectMessage';
   channel: Channel;
   workspaceData: WorkSpace;
   userData: User;
+  recipientId?: string;
 };
 
 const TextEditor = ({
@@ -33,6 +34,7 @@ const TextEditor = ({
   channel,
   workspaceData,
   userData,
+  recipientId,
 }: Props) => {
   const [content, setContent] = useState<string>('');
   const [fileUplaodModal, setFileUploadModal] = useState(false);
@@ -45,7 +47,7 @@ const TextEditor = ({
     extensions: [
       StarterKit,
       PlaceHolder.configure({
-        placeholder: `Message #${type === 'channel' ? channel.name : 'USERNAME'} `,
+        placeholder: `Message #${channel.name ?? 'USERNAME'} `,
       }),
     ],
     autofocus: true,
@@ -61,12 +63,26 @@ const TextEditor = ({
 
   const handleSend = async () => {
     if (content.length < 2) return;
+
     try {
+      const payload = {
+        content,
+        type,
+      };
+
+      let endpoint = apiUrl;
+
+      if (type === 'Channel' && channel) {
+        endpoint += `?channelId=${channel.id}&workspaceId=${workspaceData.id}`;
+      } else if (type === 'DirectMessage' && recipientId) {
+        endpoint += `?recipientId=${recipientId}&workspaceId=${workspaceData.id}`;
+      }
+
       await axios({
         withCredentials: true,
         method: 'POST',
-        url: `${apiUrl}?channelId=${channel.id}&workspaceId=${workspaceData.id}`,
-        data: { content },
+        url: endpoint,
+        data: payload,
       });
       setContent('');
       editor?.commands.setContent('');
@@ -82,7 +98,7 @@ const TextEditor = ({
       </div>
       <div className="h-[150px] pt-11 flex w-full grow-1">
         <EditorContent
-          className="prose w-full h-full dark:text-white leading-[1.15px] overflow-y-hidden"
+          className="prose w-full h-[150px] dark:text-white leading-[1.15px] overflow-y-hidden whitespace-pre-wrap"
           editor={editor}
         />
       </div>
@@ -115,6 +131,7 @@ const TextEditor = ({
             userData={userData}
             workspaceData={workspaceData}
             channel={channel}
+            recipientId={recipientId}
             toggleFileUploadModal={toggleFileUploadModal}
           />
         </DialogContent>

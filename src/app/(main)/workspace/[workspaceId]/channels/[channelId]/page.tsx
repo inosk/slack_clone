@@ -4,11 +4,7 @@ import {
   getCurrentWorkspaceData,
   getUserWorkspaceData,
 } from '@/actions/workspaces';
-import ChatHeader from '@/components/chat-header';
-import InfoSection from '@/components/info-section';
-import Sidebar from '@/components/sidebar';
-import TextEditor from '@/components/text-editor';
-import Typography from '@/components/ui/typography';
+import ChatGroup from '@/components/chat-group';
 import { WorkSpace } from '@/types/app';
 import { redirect } from 'next/navigation';
 
@@ -37,34 +33,25 @@ const Page = async ({
 
   return (
     <div className="hidden md:block">
-      <div className="h-[calc(100vh-256px)] bg-red-400 overflow-y-auto [&::state(webkit-scrollbar-thumb)]:rounded-[6px] [&::state(webkit-scrollbar-thumb)]:bg-foreground/60 [&::state(webkit-scrollbar-track)]:bg-none [&::state(webkit-scrollbar)]:w-2">
-        <Sidebar
-          currentWorkspaceData={currentWorkspaceData as WorkSpace}
-          userData={userData}
-          userWorkspaceData={userWorkspaceData as WorkSpace[]}
-        />
-        <InfoSection
-          currentWorkspaceData={currentWorkspaceData as WorkSpace}
-          userData={userData}
-          userWorkspaceChannels={userWorkspaceChannels}
-          currentChannelId={channelId}
-        />
-        <div className="p-4 relative w-full overflow-hidden">
-          <ChatHeader title={currentChannelData.name} />
-          <div className="mt-10">
-            <Typography text="Chat content" variant="h4" />
-          </div>
-        </div>
-      </div>
-      <div className="m-4">
-        <TextEditor
-          apiUrl="/api/web-socket/messages/"
-          type="channel"
-          channel={currentChannelData}
-          workspaceData={currentWorkspaceData as WorkSpace}
-          userData={userData}
-        />
-      </div>
+      <ChatGroup
+        type="Channel"
+        userData={userData}
+        currentChannelData={currentChannelData}
+        currentWorkspaceData={currentWorkspaceData as WorkSpace}
+        slug={workspaceId}
+        chatId={channelId}
+        userWorkspaceChannels={userWorkspaceChannels}
+        socketUrl="/api/web-socket/messages"
+        socketQuery={{
+          channelId: currentChannelData.id,
+          workspaceId: workspaceId,
+        }}
+        apiUrl="/api/messages"
+        headerTitle={currentChannelData.name}
+        paramKey="channelId"
+        paramValue={channelId}
+        userWorkspaceData={userWorkspaceData as WorkSpace[]}
+      />
     </div>
   );
 };

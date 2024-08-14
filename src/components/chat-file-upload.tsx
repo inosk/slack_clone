@@ -26,7 +26,8 @@ import { toast } from 'sonner';
 type Props = {
   userData: User;
   workspaceData: WorkSpace;
-  channel: Channel;
+  channel?: Channel;
+  recipientId?: string;
   toggleFileUploadModal: () => void;
 };
 
@@ -47,6 +48,7 @@ const ChatFileUpload = ({
   workspaceData,
   channel,
   toggleFileUploadModal,
+  recipientId,
 }: Props) => {
   const [isUploading, setIsUploading] = useState(false);
 
@@ -88,14 +90,29 @@ const ChatFileUpload = ({
       return { error: error.message };
     }
 
-    const { data: messageData, error: messageInsertError } = await supabase
-      .from('messages')
-      .insert({
+    let messageInsertError;
+
+    if (recipinetId) {
+      const { error: dmInsertError } = await supabase
+        .from('direct_messages')
+        .insert({
+          file_url: data.path,
+          user: userData.id,
+          user_one: userData.id,
+          user_two: recipientId,
+        });
+
+      messageInsertError = dmInsertError;
+    } else {
+      const { error: cmInsertError } = await supabase.from('messages').insert({
         file_url: data.path,
         user_id: userData.id,
         channel_id: channel.id,
         workspace_id: workspaceData.id,
       });
+
+      messageInsertError = cmInsertError;
+    }
 
     if (messageInsertError) {
       console.log('Error inserting message', messageInsertError);
