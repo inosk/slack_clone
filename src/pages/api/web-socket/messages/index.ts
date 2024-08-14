@@ -1,10 +1,11 @@
 import { getUserDataPages } from '@/actions/get-user-data';
 import supabaseServerClientPages from '@/supabase/supabaseServerPages';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { SocketIoApiResponse } from '@/types/app';
+import { NextApiRequest } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: SocketIoApiResponse,
 ) {
   if (req.method !== 'POST')
     return res.status(405).json({ message: 'Mehotd not allowed' });
@@ -51,6 +52,7 @@ export default async function handler(
         },
       ])
       .select('*, user: user_id(*)')
+      .order('created_at', { ascending: true })
       .single();
 
     if (creatingMessageError) {
@@ -62,6 +64,11 @@ export default async function handler(
       console.log('MESSAGE CREATION ERROR: ', creatingMessageError);
       return res.status(500).json({ message: 'Internal server error' });
     }
+
+    res?.socket?.server?.io?.emit(
+      `channel:${channelId}:channel-messages`,
+      data,
+    );
 
     return res
       .status(200)

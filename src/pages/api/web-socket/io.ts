@@ -1,0 +1,22 @@
+import { SocketIoApiResponse } from '@/types/app';
+import { NextApiRequest } from 'next';
+import { Server as NetServer, Socket } from 'net';
+import { Server as SocketServer } from 'socket.io';
+
+const initializeSocketServer = (httpServer: NetServer): SocketServer => {
+  const path = '/api/web-socket/io';
+  return new SocketServer(httpServer, {
+    path,
+    addTrailingSlash: false,
+  });
+};
+
+const handler = async (req: NextApiRequest, res: SocketIoApiResponse) => {
+  if (!res.socket.server.io) {
+    res.socket.server.io = initializeSocketServer(res.socket.server.io);
+  }
+
+  res.end();
+};
+
+export default handler;
