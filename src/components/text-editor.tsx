@@ -43,7 +43,7 @@ const TextEditor = ({
     setFileUploadModal((prevState) => !prevState);
 
   const editor = useEditor({
-    immediatelyRender: false,
+    //immediatelyRender: false,
     extensions: [
       StarterKit,
       PlaceHolder.configure({

@@ -92,7 +92,7 @@ const ChatFileUpload = ({
 
     let messageInsertError;
 
-    if (recipinetId) {
+    if (recipientId) {
       const { error: dmInsertError } = await supabase
         .from('direct_messages')
         .insert({

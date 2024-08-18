@@ -38,7 +38,7 @@ export default async function handler(
       return res.status(403).json({ message: 'Channel not found' });
     }
 
-    const { error: creatingMessageError, data: messageData } = await supabase
+    const { error: creatingMessageError, data } = await supabase
       .from('messages')
       .insert([
         {
@@ -72,7 +72,7 @@ export default async function handler(
 
     return res
       .status(200)
-      .json({ message: 'Message created successfully', data: messageData });
+      .json({ message: 'Message created successfully', data });
   } catch (error) {
     console.log('MESSAGE CREATION ERROR: ', error);
     return res.status(500).json({ message: 'Internal server error' });

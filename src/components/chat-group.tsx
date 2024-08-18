@@ -2,8 +2,8 @@ import ChatHeader from '@/components/chat-header';
 import InfoSection from '@/components/info-section';
 import Sidebar from '@/components/sidebar';
 import TextEditor from '@/components/text-editor';
-import Typography from '@/components/ui/typography';
 import { Channel, User, WorkSpace } from '@/types/app';
+import ChatMessages from '@/components/chat-messages';
 
 type Props = {
   type: 'Channel' | 'DirectMessage';
@@ -39,7 +39,7 @@ const ChatGroup = ({
 }: Props) => {
   return (
     <>
-      <div className="h-[calc(100vh-256px)] bg-red-400 overflow-y-auto [&::state(webkit-scrollbar-thumb)]:rounded-[6px] [&::state(webkit-scrollbar-thumb)]:bg-foreground/60 [&::state(webkit-scrollbar-track)]:bg-none [&::state(webkit-scrollbar)]:w-2">
+      <div className="h-[calc(100vh-256px)] overflow-y-auto [&::state(webkit-scrollbar-thumb)]:rounded-[6px] [&::state(webkit-scrollbar-thumb)]:bg-foreground/60 [&::state(webkit-scrollbar-track)]:bg-none [&::state(webkit-scrollbar)]:w-2">
         <Sidebar
           currentWorkspaceData={currentWorkspaceData as WorkSpace}
           userData={userData}
@@ -56,7 +56,19 @@ const ChatGroup = ({
         <div className="p-4 relative w-full overflow-hidden">
           <ChatHeader title={headerTitle} chatId={chatId} useData={userData} />
           <div className="mt-10">
-            <Typography text="Chat content" variant="h4" />
+            <ChatMessages
+              userData={userData}
+              name={currentChannelData?.name ?? 'USERNAME'}
+              workspaceData={currentWorkspaceData}
+              chatId={chatId}
+              type={type}
+              apiUrl={apiUrl}
+              socketUrl={socketUrl}
+              socketQuery={socketQuery}
+              paramKey={paramKey}
+              paramValue={paramValue}
+              channelData={currentChannelData}
+            />
           </div>
         </div>
       </div>
