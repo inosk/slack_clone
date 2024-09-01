@@ -21,7 +21,7 @@ export type WorkSpace = {
   id: string;
   image_url: string | null;
   invite_code: string | null;
-  members: string[] | null;
+  members: User[] | null;
   name: string;
   regulators: string[] | null;
   slug: string;

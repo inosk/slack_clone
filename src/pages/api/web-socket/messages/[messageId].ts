@@ -67,10 +67,12 @@ export default async function handler(
     if (messageError || !updateMessage) {
       return res.status(404).json({ error: 'Message not found' });
     }
+
     res?.socket?.server?.io?.emit(
       `channel:${channelId}:channel-messages:update`,
       updateMessage,
     );
+
     return res.status(200).json({ message: updateMessage });
   } catch (error) {
     console.log('Message ID Error', error);
