@@ -4,6 +4,7 @@ import Sidebar from '@/components/sidebar';
 import TextEditor from '@/components/text-editor';
 import { Channel, User, WorkSpace } from '@/types/app';
 import ChatMessages from '@/components/chat-messages';
+import SearchBar from './search-bar';
 
 type Props = {
   type: 'Channel' | 'DirectMessage';
@@ -52,6 +53,11 @@ const ChatGroup = ({
           currentChannelId={
             type === 'Channel' ? currentChannelData?.id : undefined
           }
+        />
+        <SearchBar
+          currentWorkspaceData={currentChannelData}
+          currentChannelData={currentChannelData}
+          loggedInUserId={userData.id}
         />
         <div className="p-4 relative w-full overflow-hidden">
           <ChatHeader title={headerTitle} chatId={chatId} useData={userData} />
